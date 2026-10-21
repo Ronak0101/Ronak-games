@@ -1,0 +1,1072 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Ronak Games - Guess the Number</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+          content="Play the free Guess the Number game by Ronak Games! Challenge the AI bot or a friend, earn coins, and unlock new levels. New improvements are planned regularly.">
+    <meta name="theme-color" content="#0b1020">
+    <title>Ronak Games | Guess the Number</title>
+
+<style>
+:root {
+    --bg: #0b1020;
+    --panel: #151d35;
+    --panel2: #202b49;
+    --text: #f4f6ff;
+    --muted: #b8c3df;
+    --accent: #8b5cf6;
+    --pink: #ec4899;
+    --border: #354366;
+    --good: #34d399;
+    --bad: #fb7185;
+}
+
+body.day {
+    --bg: #edf2ff;
+    --panel: #ffffff;
+    --panel2: #e4eaff;
+    --text: #17213b;
+    --muted: #53617d;
+    --border: #c6d0ed;
+    --accent: #7044e8;
+    --pink: #d63384;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at 10% 10%, #8b5cf622, transparent 35%),
+        radial-gradient(circle at 90% 90%, #ec489922, transparent 35%),
+        var(--bg);
+    transition: background .3s, color .3s;
+}
+
+button, input, select { font: inherit; }
+
+button {
+    border: none;
+    padding: 13px 18px;
+    border-radius: 12px;
+    background: linear-gradient(100deg, var(--accent), var(--pink));
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .2s, filter .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.12);
+}
+
+button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondary {
+    background: var(--panel2);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 17px 22px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.brand span { color: var(--pink); }
+
+.header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+main {
+    width: min(100% - 36px, 780px);
+    margin: 28px auto 50px;
+    padding-right: 15px;
+}
+
+.page { animation: appear .35s ease; }
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 18px;
+    box-shadow: 0 15px 45px #00000012;
+}
+
+.hero {
+    text-align: center;
+    padding: 35px 22px;
+}
+
+.hero-icon { font-size: 60px; }
+
+h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    margin: 12px 0;
+}
+
+h2 { margin-top: 0; }
+
+p {
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.accent { color: var(--pink); }
+.muted { color: var(--muted); }
+
+input, select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    margin: 9px 0 15px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px #8b5cf633;
+}
+
+label { font-weight: bold; }
+
+.hidden { display: none !important; }
+
+.badge {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 30px;
+    background: #8b5cf622;
+    color: var(--pink);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.guide-list {
+    padding-left: 23px;
+    line-height: 1.8;
+}
+
+.guide-list li { margin-bottom: 10px; }
+
+.note {
+    border: 1px solid #d97706;
+    background: #f59e0b12;
+    padding: 15px;
+    border-radius: 12px;
+    line-height: 1.7;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.row > * { flex: 1; }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.stat {
+    text-align: center;
+    padding: 15px 5px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+.stat small { color: var(--muted); }
+
+.game-number {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--pink);
+    text-shadow: 0 0 22px #ec489944;
+}
+
+#feedback {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--panel2);
+    line-height: 1.5;
+    font-weight: bold;
+}
+
+#log {
+    max-height: 190px;
+    overflow-y: auto;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.credit {
+    position: fixed;
+    top: 50%;
+    right: 7px;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--pink);
+    text-shadow: 0 0 8px var(--accent), 0 0 16px var(--pink);
+    animation: glow 2s infinite alternate;
+    z-index: 10;
+}
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 15px;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+    from { opacity: .7; }
+    to { opacity: 1; }
+}
+
+@media(max-width: 520px) {
+    header { padding: 14px 10px; }
+    .brand { font-size: 15px; }
+    main { width: calc(100% - 25px); padding-right: 12px; }
+    .card { padding: 18px; }
+    .stats { gap: 5px; }
+    .stat strong { font-size: 18px; }
+    .credit { right: 3px; font-size: 10px; }
+}
+
+/* ---------- UPDATE LOG POPUP ---------- */
+.update-log-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(8, 3, 30, .78);
+    backdrop-filter: blur(5px);
+}
+.update-log-overlay.hidden { display: none !important; }
+.update-log-window {
+    width: min(100%, 440px);
+    max-height: min(82vh, 680px);
+    overflow-y: auto;
+    position: relative;
+    border: 3px solid #12b9d5;
+    border-radius: 18px;
+    padding: 24px;
+    color: #222;
+    background:
+        radial-gradient(circle at 10% 15%, #e7faff 0 2px, transparent 3px),
+        linear-gradient(135deg, #ffffff, #eefaff);
+    box-shadow: 0 0 0 5px #12b9d533, 0 18px 60px #0009;
+    animation: updatePop .25s ease-out;
+}
+.update-log-heading {
+    margin: 0 38px 8px 0;
+    color: #00a8e8;
+    font-size: clamp(27px, 6vw, 34px);
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 1px 2px 0 #b8efff;
+}
+.update-log-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 9px;
+    background: #ef2020;
+    color: white;
+    font-size: 22px;
+    line-height: 1.1;
+    box-shadow: 0 3px 0 #a90c0c;
+}
+.update-log-title {
+    margin: 8px 0;
+    text-align: center;
+    color: #252b3a;
+    font-size: 22px;
+}
+.update-log-date {
+    margin: 0 0 16px;
+    color: #687386;
+    text-align: center;
+    font-weight: bold;
+}
+.update-log-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.55;
+}
+.update-log-list li {
+    padding: 9px 0;
+    border-bottom: 1px solid #d9e6ee;
+}
+.update-log-list li:last-child { border-bottom: 0; }
+.update-log-version {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    color: #075985;
+    background: #d8f5ff;
+    font-size: 12px;
+    font-weight: 900;
+}
+.update-log-footer {
+    margin: 16px 0 0;
+    text-align: center;
+    color: #53617d;
+    font-size: 13px;
+}
+@keyframes updatePop {
+    from { opacity: 0; transform: translateY(12px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (max-width: 420px) {
+    .update-log-window { padding: 20px 16px; }
+    .update-log-title { font-size: 19px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">RONAK <span>GAMES</span> 🎮</div>
+    <div class="header-actions">
+        <button class="secondary" id="themeButton"
+                onclick="toggleTheme()">☀️ Day Mode</button>
+        <button class="secondary" onclick="goTo('guidePage')">
+            📖 Guide
+        </button>
+        <button class="secondary" onclick="openUpdateLog()">
+            🆕 Update Log
+        </button>
+    </div>
+</header>
+
+<main>
+
+<!-- PAGE 1: LOGIN -->
+<section id="loginPage" class="page">
+    <div class="card hero">
+        <div class="hero-icon">🎮</div>
+        <span class="badge">WELCOME TO RONAK GAMES</span>
+        <h1>Guess the <span class="accent">Number!</span></h1>
+        <p>Enter your player name to enter the game.</p>
+
+        <form id="loginForm">
+            <label for="playerName">Your Player Name</label>
+            <input id="playerName" type="text"
+                   maxlength="20" placeholder="Enter your name..."
+                   autocomplete="nickname" required>
+
+            <button type="submit" style="width:100%">
+                LOGIN & CONTINUE →
+            </button>
+        </form>
+
+        <p>🪙 Collect coins. 🏆 Beat the AI. 🔓 Unlock new levels.</p>
+    </div>
+</section>
+
+<!-- PAGE 2: GUIDE -->
+<section id="guidePage" class="page hidden">
+    <div class="card hero">
+        <div class="hero-icon">📘</div>
+        <h1>Game <span class="accent">Guide</span></h1>
+        <p>Welcome, <b id="guideName">Player</b>! Read the rules before playing.</p>
+    </div>
+
+    <div class="card">
+        <h2>🎯 How to Play</h2>
+        <ol class="guide-list">
+            <li><b>Choose your opponent:</b> play against the AI bot or a second player sharing your device.</li>
+            <li><b>Choose your level:</b> Easy uses numbers from 1–50. Medium uses numbers from 1–100 and costs 100 coins to unlock.</li>
+            <li><b>Guess the secret number:</b> if your guess is wrong, the game tells you whether to guess higher or lower.</li>
+            <li><b>Watch the clues and cooldown:</b> a difference greater than 20 gives a “WAY TOO HIGH!” or “WAY TOO LOW!” hint. After your wrong guess, the AI waits 0.5 seconds before guessing.</li>
+            <li><b>Earn and spend coins:</b> win against the AI to earn coins. If the AI wins, you lose 40% of your current coins, rounded down.</li>
+        </ol>
+
+        <div class="note">
+            📢 <b>UPDATE NOTE:</b>
+     
+            <b>Update 1 at 30 Oct, 4:30 P. M.</b>
+            <b>We Are going to add alot of changes in the upcoming updates and the updates would come every week!!!</b>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🏆 Levels and Rewards</h2>
+        <p>🟢 Easy: numbers 1–50. Win against AI to earn <b>20 coins</b>.</p>
+        <p>🟣 Medium: numbers 1–100. Win against AI to earn <b>50 coins</b>.</p>
+        <p>🔒 Unlock Medium for 100 coins.</p>
+        <button onclick="goTo('gamePage')" style="width:100%">
+            START PLAYING 🚀
+        </button>
+    </div>
+</section>
+
+<!-- PAGE 3: GAME -->
+<section id="gamePage" class="page hidden">
+
+    <div class="card">
+        <h2>👋 Welcome, <span id="gameName" class="accent">Player</span>!</h2>
+        <p>Find the secret number before the AI bot does.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <strong>🪙 <span id="coins">0</span></strong>
+            <small>Coins</small>
+        </div>
+        <div class="stat">
+            <strong>🏆 <span id="wins">0</span></strong>
+            <small>Your AI wins</small>
+        </div>
+        <div class="stat">
+            <strong>🎮 <span id="levelLabel">Easy</span></strong>
+            <small>Level</small>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>⚙️ Game Setup</h2>
+
+        <label for="mode">Opponent</label>
+        <select id="mode">
+            <option value="ai">🤖 Play vs AI Bot</option>
+            <option value="local">👥 Two Players — Same Device</option>
+        </select>
+
+        <label for="level">Difficulty</label>
+        <select id="level">
+            <option value="easy">🟢 Easy — 1 to 50</option>
+            <option value="medium" id="mediumOption" disabled>
+                🔒 Medium — 100 coins
+            </option>
+        </select>
+
+        <div class="row">
+            <button onclick="startGame()">🔄 New Round</button>
+            <button class="secondary" onclick="goTo('guidePage')">
+                📖 Rules
+            </button>
+        </div>
+    </div>
+
+    <div class="card" id="playCard">
+        <div class="row">
+            <div>
+                <span class="badge" id="roundBadge">ROUND 1</span>
+                <h2 id="turnTitle">Your Turn!</h2>
+            </div>
+            <div style="text-align:right">
+                <small class="muted">Number range</small>
+                <h2 id="rangeLabel">1–50</h2>
+            </div>
+        </div>
+
+        <p id="turnDescription">Enter a guess to begin!</p>
+
+        <div style="text-align:center">
+            <div class="game-number" id="questionMark">?</div>
+            <p id="attemptLabel">Your guesses: 0</p>
+        </div>
+
+        <label for="guess">Your Guess</label>
+        <input id="guess" type="number" min="1" max="50"
+               placeholder="Enter a number..." autocomplete="off">
+
+        <button id="guessButton" onclick="submitGuess()"
+                style="width:100%">GUESS NUMBER </button>
+
+        <p id="feedback" aria-live="polite">
+            🎮 Ready? Make your first guess!
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>📜 Round History</h2>
+        <ul id="log">
+            <li>Welcome to the game!</li>
+        </ul>
+        <button class="secondary" onclick="clearHistory()">
+            Clear History
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>🛒 Level Shop</h2>
+        <p>Unlock Medium to guess numbers between 1 and 100.</p>
+        <button id="unlockButton" onclick="unlockMedium()">
+            🔒 Unlock Medium — 100 🪙
+        </button>
+    </div>
+
+<!-- PLAYER VISITS AND TIME PLAYED -->
+<div class="card">
+    <div class="stats">
+        <div class="stat">
+            <strong>👥 <span id="playerVisits">1</span></strong>
+            <small>Player Visits</small>
+        </div>
+
+        <div class="stat">
+            <strong>⏱️ <span id="timePlayed">0m 0s</span></strong>
+            <small>Time Played</small>
+        </div>
+    </div>
+</div>
+
+</section>
+
+
+<!-- UPDATE LOG POPUP -->
+<div id="updateLogOverlay" class="update-log-overlay hidden"
+     role="dialog" aria-modal="true" aria-labelledby="updateLogHeading"
+     onclick="if (event.target === this) closeUpdateLog()">
+    <div class="update-log-window">
+        <button class="update-log-close" type="button"
+                aria-label="Close update log" onclick="closeUpdateLog()">✖</button>
+        <h2 id="updateLogHeading" class="update-log-heading">Update Log</h2>
+
+        <section aria-labelledby="updateVersionTitle">
+            <div style="text-align:center">
+                <span class="update-log-version">VERSION 1.0</span>
+            </div>
+            <h3 id="updateVersionTitle" class="update-log-title">
+                Ronak Games Launch!
+            </h3>
+            <p class="update-log-date">21 October 2026</p>
+            <ul class="update-log-list">
+                <li>🎮 Guess the Number game with Easy and unlockable Medium levels</li>
+                <li>🤖 Play against the AI bot or use local two-player mode</li>
+                <li>🪙 Earn coins, unlock Medium, and track wins</li>
+                <li>🌙 Switch between day and night themes</li>
+                <li>📊 Player Visits and Time Played statistics</li>
+            </ul>
+        </section>
+
+        <hr style="border:0;border-top:1px solid #d9e6ee;margin:18px 0">
+
+        <section aria-labelledby="nextUpdateTitle">
+            <div style="text-align:center">
+                <span class="update-log-version">COMING NEXT</span>
+            </div>
+            <h3 id="nextUpdateTitle" class="update-log-title">More improvements!</h3>
+            <p class="update-log-date">Planned: 30 October 2026</p>
+            <ul class="update-log-list">
+                <li>✨ More polish and improvements for the website</li>
+                <li>📝 New update notes will be added when changes are released</li>
+            </ul>
+        </section>
+        <p class="update-log-footer">Thanks for playing Ronak Games! 💙<br>More updates coming soon.</p>
+    </div>
+</div>
+
+</main>
+
+<div class="credit">Made by Ronak </div>
+<footer>RONAK GAMES • Guess smart. Win big.</footer>
+
+<script>
+// ---------- PLAYER DATA ----------
+function loadSave() {
+    try {
+        return JSON.parse(localStorage.getItem("ronakGameSave")) || {};
+    } catch {
+        return {};
+    }
+}
+
+const saved = loadSave();
+
+let playerName = saved.playerName || "";
+let coins = Number.isFinite(saved.coins) ? Math.max(0, saved.coins) : 0;
+let wins = Number.isFinite(saved.wins) ? Math.max(0, saved.wins) : 0;
+let mediumUnlocked = saved.mediumUnlocked === true;
+
+function saveData() {
+    localStorage.setItem("ronakGameSave", JSON.stringify({
+        playerName,
+        coins,
+        wins,
+        mediumUnlocked
+    }));
+}
+
+const $ = id => document.getElementById(id);
+
+// ---------- UPDATE LOG ----------
+function openUpdateLog() {
+    $("updateLogOverlay").classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    $("updateLogOverlay").querySelector(".update-log-close").focus();
+}
+function closeUpdateLog() {
+    $("updateLogOverlay").classList.add("hidden");
+    document.body.style.overflow = "";
+}
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !$("updateLogOverlay").classList.contains("hidden")) {
+        closeUpdateLog();
+    }
+});
+
+// ---------- PAGE NAVIGATION ----------
+function goTo(pageId) {
+    if (pageId === "gamePage") {
+        startPlayTimer();
+    } else {
+        stopPlayTimer();
+    }
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.add("hidden");
+    });
+
+    $(pageId).classList.remove("hidden");
+
+    if (pageId === "gamePage") {
+        updateStats();
+    }
+}
+
+$("loginForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const name = $("playerName").value.trim();
+
+    if (!name) return;
+
+    playerName = name.slice(0, 20);
+    saveData();
+
+    $("guideName").textContent = playerName;
+    $("gameName").textContent = playerName;
+
+    goTo("guidePage");
+});
+
+if (playerName) {
+    $("playerName").value = playerName;
+    $("guideName").textContent = playerName;
+    $("gameName").textContent = playerName;
+    goTo("guidePage");
+} else {
+    goTo("loginPage");
+}
+
+// ---------- DAY / NIGHT ----------
+function toggleTheme() {
+    document.body.classList.toggle("day");
+
+    const isDay = document.body.classList.contains("day");
+
+    $("themeButton").textContent = isDay
+        ? "🌙 Night Mode"
+        : "☀️ Day Mode";
+}
+
+// ---------- GAME VARIABLES ----------
+let secret = 0;
+let maxNumber = 50;
+let attempts = 0;
+let round = 1;
+let currentPlayer = 1;
+let gameOver = true;
+let aiTimer = null;
+let aiLow = 1;
+let aiHigh = 50;
+let aiGuesses = new Set();
+let logEntries = [];
+
+function addLog(text) {
+    logEntries.unshift(text);
+    logEntries = logEntries.slice(0, 30);
+
+    $("log").replaceChildren();
+
+    logEntries.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = entry;
+        $("log").appendChild(li);
+    });
+}
+
+function clearHistory() {
+    logEntries = [];
+    addLog("History cleared.");
+}
+
+function updateStats() {
+    $("coins").textContent = coins;
+    $("wins").textContent = wins;
+    $("levelLabel").textContent =
+        $("level").value === "medium" ? "Medium" : "Easy";
+
+    $("mediumOption").disabled = !mediumUnlocked;
+    $("mediumOption").textContent = mediumUnlocked
+        ? "🟣 Medium — 1 to 100"
+        : "🔒 Medium — 100 coins";
+
+    $("unlockButton").disabled = mediumUnlocked || coins < 100;
+    $("unlockButton").textContent = mediumUnlocked
+        ? "✅ Medium Unlocked!"
+        : "🔒 Unlock Medium — 100 🪙";
+
+    saveData();
+}
+
+// ---------- START A ROUND ----------
+function startGame() {
+    clearTimeout(aiTimer);
+
+    if ($("level").value === "medium" && !mediumUnlocked) {
+        $("level").value = "easy";
+    }
+
+    maxNumber = $("level").value === "medium" ? 100 : 50;
+    secret = Math.floor(Math.random() * maxNumber) + 1;
+
+    attempts = 0;
+    currentPlayer = 1;
+    gameOver = false;
+
+    aiLow = 1;
+    aiHigh = maxNumber;
+    aiGuesses = new Set();
+
+    $("guess").value = "";
+    $("guess").min = 1;
+    $("guess").max = maxNumber;
+    $("rangeLabel").textContent = `1–${maxNumber}`;
+    $("roundBadge").textContent = `ROUND ${round}`;
+    $("turnTitle").textContent = "Your Turn!";
+    $("attemptLabel").textContent = "Your guesses: 0";
+    $("questionMark").textContent = "?";
+
+    $("feedback").textContent = "🎮 New round! Make your first guess.";
+    $("feedback").style.color = "var(--text)";
+
+    $("guess").disabled = false;
+    $("guessButton").disabled = false;
+
+    $("turnDescription").textContent =
+        $("mode").value === "local"
+        ? "Players take turns guessing the same secret number."
+        : "Guess correctly before the AI bot does.";
+
+    addLog(`Round ${round}: ${$("level").value} mode started.`);
+    updateStats();
+    $("guess").focus();
+}
+
+$("mode").addEventListener("change", startGame);
+
+$("level").addEventListener("change", () => {
+    if ($("level").value === "medium" && !mediumUnlocked) {
+        $("level").value = "easy";
+        $("feedback").textContent =
+            "🔒 You need to unlock Medium first!";
+        return;
+    }
+
+    startGame();
+});
+
+// ---------- PLAYER GUESS ----------
+function submitGuess() {
+    if (gameOver) return;
+
+    const raw = $("guess").value;
+    const guess = Number(raw);
+
+    if (raw.trim() === "" ||
+        !Number.isInteger(guess) ||
+        guess < 1 ||
+        guess > maxNumber) {
+        $("feedback").textContent =
+            `⚠️ Enter a whole number from 1 to ${maxNumber}.`;
+        return;
+    }
+
+    $("guess").value = "";
+    attempts++;
+
+    const local = $("mode").value === "local";
+    const name = local ? `Player ${currentPlayer}` : playerName;
+
+    $("attemptLabel").textContent = `${name}'s guesses: ${attempts}`;
+
+    if (guess === secret) {
+        addLog(`${name} guessed ${guess} correctly!`);
+
+        $("feedback").textContent = `🎉 ${name} found the number!`;
+        finishRound(local ? "local" : "human");
+        return;
+    }
+
+    const difference = Math.abs(guess - secret);
+    let hint;
+
+    if (guess > secret) {
+        hint = difference > 20
+            ? " WAY TOO HIGH! Guess much lower!"
+            : "📉 TOO HIGH! Guess lower!";
+    } else {
+        hint = difference > 20
+            ? " WAY TOO LOW! Guess much higher!"
+            : "📈 TOO LOW! Guess higher!";
+    }
+
+    $("feedback").textContent = `${name}: ${hint}`;
+    addLog(`${name} guessed ${guess}: ${guess > secret ? "Too high" : "Too low"}.`);
+
+    if (local) {
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        $("turnTitle").textContent = `Player ${currentPlayer}'s Turn!`;
+        $("turnDescription").textContent =
+            "Pass the device to the next player.";
+        return;
+    }
+
+    // IMPORTANT: Disable input while waiting for the AI.
+    $("guess").disabled = true;
+    $("guessButton").disabled = true;
+    $("turnTitle").textContent = "⏳ AI cooldown: 0.5 seconds...";
+
+    // The AI starts its turn after exactly 500 milliseconds.
+    aiTimer = setTimeout(aiTurn, 500);
+}
+
+$("guess").addEventListener("keydown", event => {
+    if (event.key === "Enter" && !$("guessButton").disabled) {
+        submitGuess();
+    }
+});
+
+// ---------- AI TURN ----------
+function aiTurn() {
+    if (gameOver) return;
+
+    // Binary search: the bot chooses the middle of its remaining range.
+    let aiGuess = Math.floor((aiLow + aiHigh) / 2);
+
+    while (aiGuesses.has(aiGuess) &&
+           aiLow <= aiHigh) {
+        aiGuess++;
+
+        if (aiGuess > aiHigh) {
+            aiGuess = aiLow;
+            break;
+        }
+    }
+
+    aiGuesses.add(aiGuess);
+
+    if (aiGuess === secret) {
+        addLog(`🤖 AI guessed ${aiGuess} correctly!`);
+        $("feedback").textContent =
+            `🤖 AI found ${secret}! You lost this round.`;
+        finishRound("ai");
+        return;
+    }
+
+    if (aiGuess < secret) {
+        aiLow = aiGuess + 1;
+        addLog(`AI guessed ${aiGuess}: Too low.`);
+    } else {
+        aiHigh = aiGuess - 1;
+        addLog(`AI guessed ${aiGuess}: Too high.`);
+    }
+
+    $("feedback").textContent =
+        `🤖 AI guessed ${aiGuess}. Your turn again!`;
+
+    $("turnTitle").textContent = "Your Turn!";
+    $("turnDescription").textContent =
+        "The AI has guessed. Try to find the secret number!";
+
+    $("guess").disabled = false;
+    $("guessButton").disabled = false;
+    $("guess").focus();
+}
+
+// ---------- ROUND RESULTS ----------
+function finishRound(winner) {
+    gameOver = true;
+    clearTimeout(aiTimer);
+
+    $("guess").disabled = true;
+    $("guessButton").disabled = true;
+    $("questionMark").textContent = secret;
+
+    if (winner === "human") {
+        const reward = $("level").value === "medium" ? 50 : 20;
+
+        coins += reward;
+        wins++;
+
+        $("feedback").textContent = `🏆 YOU WIN! +${reward} coins!`;
+        $("feedback").style.color = "var(--good)";
+
+        addLog(`🏆 ${playerName} earned ${reward} coins.`);
+    } else if (winner === "ai") {
+        const penalty = Math.floor(coins * 0.40);
+
+        coins -= penalty;
+
+        $("feedback").textContent =
+            `🤖 AI WINS! You lost ${penalty} coins (40%).`;
+        $("feedback").style.color = "var(--bad)";
+
+        addLog(`AI won. ${penalty} coins deducted.`);
+    } else {
+        $("feedback").textContent =
+            `🎉 PLAYER ${currentPlayer} WINS!`;
+        $("feedback").style.color = "var(--good)";
+
+        addLog(`Player ${currentPlayer} won!`);
+    }
+
+    round++;
+    updateStats();
+}
+
+// ---------- LEVEL SHOP ----------
+function unlockMedium() {
+    if (mediumUnlocked) return;
+
+    if (coins < 100) {
+        $("feedback").textContent =
+            "🪙 You need 100 coins to unlock Medium.";
+        return;
+    }
+
+    coins -= 100;
+    mediumUnlocked = true;
+    $("level").value = "medium";
+
+    updateStats();
+
+    addLog("🔓 Medium level unlocked!");
+    $("feedback").textContent = "🎉 MEDIUM LEVEL UNLOCKED!";
+
+    startGame();
+}
+
+// Initial stats
+updateStats();
+
+/* PLAYER VISITS */
+let playerVisits = Number(
+    localStorage.getItem("ronakPlayerVisits") || 0
+);
+
+playerVisits++;
+localStorage.setItem("ronakPlayerVisits", playerVisits);
+
+document.getElementById("playerVisits").textContent =
+    playerVisits;
+
+/* TIME PLAYED — counts time while Page 3 is open */
+let totalSeconds = Number(localStorage.getItem("ronakTimePlayed") || 0);
+let playTimerStart = null;
+let playTimerInterval = null;
+
+function renderTimePlayed() {
+    const activeSeconds = playTimerStart === null
+        ? 0
+        : Math.floor((Date.now() - playTimerStart) / 1000);
+    const total = totalSeconds + activeSeconds;
+    $("timePlayed").textContent =
+        `${Math.floor(total / 60)}m ${total % 60}s`;
+}
+
+function startPlayTimer() {
+    if (playTimerStart !== null) return;
+    playTimerStart = Date.now();
+    renderTimePlayed();
+    playTimerInterval = setInterval(renderTimePlayed, 1000);
+}
+
+function stopPlayTimer() {
+    if (playTimerStart === null) return;
+    totalSeconds += Math.floor((Date.now() - playTimerStart) / 1000);
+    localStorage.setItem("ronakTimePlayed", String(totalSeconds));
+    playTimerStart = null;
+    clearInterval(playTimerInterval);
+    playTimerInterval = null;
+    renderTimePlayed();
+}
+
+renderTimePlayed();
+
+</script>
+
+</body>
+</html>
+
