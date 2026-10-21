@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -675,6 +674,11 @@ document.addEventListener("keydown", event => {
     }
 });
 
+// ---------- TIME PLAYED TIMER STATE ----------
+// These must be initialized before goTo() can call stopPlayTimer().
+let playTimerStart = null;
+let playTimerInterval = null;
+
 // ---------- PAGE NAVIGATION ----------
 function goTo(pageId) {
     if (pageId === "gamePage") {
@@ -1034,8 +1038,6 @@ document.getElementById("playerVisits").textContent =
 
 /* TIME PLAYED — counts time while Page 3 is open */
 let totalSeconds = Number(localStorage.getItem("ronakTimePlayed") || 0);
-let playTimerStart = null;
-let playTimerInterval = null;
 
 function renderTimePlayed() {
     const activeSeconds = playTimerStart === null
@@ -1069,4 +1071,3 @@ renderTimePlayed();
 
 </body>
 </html>
-
